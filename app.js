@@ -12,6 +12,12 @@ loadEventListeners();
 function loadEventListeners() {
   // Add task event
   form.addEventListener('submit', addTask);
+  // Remove task event
+  taskList.addEventListener('click', removeTask);
+  // Clear Tasks
+  clearBtn.addEventListener('click', clearTasks);
+  // Filter tasks event
+  filter.addEventListener('keyup', filterTasks);
 }
 
 // Add task
@@ -48,4 +54,39 @@ function addTask(e) {
   taskInput.value = '';
 
   e.preventDefault();
+}
+
+// Remove task
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains('delete-item')) {
+    if (confirm('Are you sure?')) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+// Clear Tasks
+function clearTasks() {
+  // taskList.innerHTML = ' '; (1 way to do it)
+  // Faster
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+}
+
+// Filter Tasks
+
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase(); /*it gives us what it's typed in it */
+  // Below here we can use forEach because quesrySelector returns a nodeList. if we were using
+  // selectByclass, it would returns a html collection list, and so we would need it to concert in
+  // an array before use forEach
+  document.querySelectorAll('.collection-item').forEach(function (task) {
+    const item = task.firstChild.textContent;
+    if (item.toLowerCase().indexOf(text) != -1) {
+      task.style.display = 'block';
+    } else {
+      task.style.display = 'none';
+    }
+  });
 }
